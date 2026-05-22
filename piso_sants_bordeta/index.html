@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piso en Venta y Alquiler — La Bordeta, Barcelona</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F8F4EE;--dark:#1C1814;--warm:#9A7B5A;--accent:#C9A876;--light:#FDFAF6;
+  --text:#3D3530;--muted:#8A7E75;--border:rgba(154,123,90,0.18);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--light);color:var(--dark);line-height:1.6}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3rem;background:rgba(253,250,246,0.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;letter-spacing:.04em;color:var(--dark)}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2.5rem;align-items:center}
+.nav-links a{font-size:.78rem;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--dark)}
+
+.mode-bar{position:fixed;top:4.5rem;left:50%;transform:translateX(-50%);z-index:99;display:flex;border:1px solid var(--border);border-radius:3px;overflow:hidden;background:rgba(253,250,246,0.95);backdrop-filter:blur(8px)}
+.mode-btn{padding:.5rem 2rem;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;transition:all .25s;background:transparent;color:var(--muted)}
+.mode-btn.active{background:var(--dark);color:var(--light)}
+
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;padding-top:5.5rem}
+.hero-left{padding:4rem 3.5rem;display:flex;flex-direction:column;justify-content:center;background:var(--cream)}
+.hero-eyebrow{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;display:flex;align-items:center;gap:.7rem}
+.hero-eyebrow::before{content:'';display:inline-block;width:2rem;height:1px;background:var(--accent)}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3.4rem);font-weight:500;line-height:1.12;color:var(--dark);margin-bottom:.4rem}
+h1 em{font-style:italic;color:var(--warm)}
+.hero-address{font-size:.85rem;color:var(--muted);margin:.8rem 0 2rem;letter-spacing:.04em}
+.hero-address strong{color:var(--dark)}
+.price-block{border-left:2px solid var(--accent);padding-left:1.2rem;margin-bottom:2.5rem}
+.price-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.3rem}
+.price-sale-val,.price-rent-val{display:none}
+.price-sale-val.show,.price-rent-val.show{display:block}
+.price-value{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:500;color:var(--dark);line-height:1}
+.price-value small{font-size:1rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300;margin-left:.3rem}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{padding:.85rem 2.2rem;background:var(--dark);color:var(--light);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;transition:background .2s,transform .15s;border-radius:2px}
+.btn-primary:hover{background:var(--warm);transform:translateY(-2px)}
+.btn-secondary{padding:.85rem 2.2rem;background:transparent;color:var(--dark);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);cursor:pointer;transition:all .2s;border-radius:2px}
+.btn-secondary:hover{border-color:var(--accent);color:var(--warm);transform:translateY(-2px)}
+
+.hero-gallery{display:grid;grid-template-rows:60% 40%;gap:3px;background:#e0d8ce;overflow:hidden}
+.gallery-main{overflow:hidden;position:relative}
+.gallery-main img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.gallery-main:hover img{transform:scale(1.03)}
+.gallery-row{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.gallery-thumb{overflow:hidden;position:relative;cursor:pointer}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.gallery-thumb:hover img{transform:scale(1.06)}
+.gallery-count{position:absolute;bottom:1rem;right:1rem;background:rgba(28,24,20,.72);color:#fff;font-size:.68rem;letter-spacing:.1em;padding:.4rem .9rem;border-radius:2px;backdrop-filter:blur(4px)}
+
+.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);background:var(--dark)}
+.stat{padding:1.6rem 1rem;border-right:1px solid rgba(255,255,255,.07);text-align:center}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:var(--accent);display:block;line-height:1}
+.stat-l{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(253,250,246,.45);margin-top:.3rem}
+
+.section{padding:5rem 4rem;max-width:1200px;margin:0 auto}
+.sec-tag{font-size:.68rem;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);margin-bottom:.8rem}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:500;line-height:1.2;margin-bottom:1.5rem}
+
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem}
+.feat-card{padding:1.8rem;border:1px solid var(--border);background:#fff;transition:border-color .2s,transform .2s;border-radius:3px}
+.feat-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.feat-icon{font-size:1.6rem;margin-bottom:.9rem;color:var(--accent)}.feat-icon i{font-size:1.6rem}
+.feat-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.5rem}
+.feat-desc{font-size:.82rem;color:var(--muted);line-height:1.65}
+
+.gallery-full-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:2rem}
+.gallery-full-grid img{width:100%;height:220px;object-fit:cover;display:block;cursor:pointer;transition:opacity .2s}
+.gallery-full-grid img:hover{opacity:.88}
+.gallery-full-grid img:first-child{grid-column:span 2;height:350px}
+
+.zona-section{background:var(--cream);padding:5rem 4rem}
+.zona-inner{max-width:1200px;margin:0 auto}
+
+.radio-block{margin-top:2.5rem}
+.radio-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;margin-bottom:1.2rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.8rem}
+.radio-badge{font-family:'Outfit',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .7rem;border-radius:2px;background:var(--dark);color:var(--accent)}
+.zona-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem}
+.zona-card{padding:1.5rem;border:1px solid var(--border);border-radius:3px;background:#fff}
+.zona-card h4{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;margin-bottom:.9rem;color:var(--dark);display:flex;align-items:center;gap:.6rem}.zona-card h4 i{font-size:1.1rem;color:var(--accent);flex-shrink:0}
+.zona-card ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.zona-card li{font-size:.81rem;color:var(--muted);display:flex;gap:.6rem;align-items:flex-start;line-height:1.5}
+.zona-card li span.dot{color:var(--accent);flex-shrink:0;font-size:.9rem}
+.zona-card li strong{color:var(--text)}
+
+.t-badge{display:inline-block;padding:.15rem .5rem;border-radius:2px;font-size:.65rem;font-weight:500;letter-spacing:.05em;margin-right:.2rem;white-space:nowrap}
+.t-metro{background:#e8003a;color:#fff}
+.t-fgc{background:#9b0073;color:#fff}
+.t-renfe{background:#0066cc;color:#fff}
+.t-bus{background:#e7a227;color:#333}
+
+.transport-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:3rem}
+.transport-col h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;margin-bottom:1.2rem;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+.transport-list{list-style:none;display:flex;flex-direction:column;gap:.65rem}
+.transport-list li{font-size:.83rem;color:var(--text);display:flex;align-items:flex-start;gap:.7rem;line-height:1.5}
+.transport-list li::before{content:'—';color:var(--accent);flex-shrink:0;margin-top:.1rem}
+
+.plano-section{padding:5rem 4rem;background:var(--light)}
+.plano-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.plano-inner img{width:100%;border-radius:3px;border:1px solid var(--border);background:#fff;padding:1rem}
+.medidas-table{width:100%;border-collapse:collapse;font-size:.83rem}
+.medidas-table tr{border-bottom:1px solid var(--border)}
+.medidas-table tr:last-child{border-bottom:none}
+.medidas-table td{padding:.65rem 0;color:var(--text)}
+.medidas-table td:first-child{color:var(--muted);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.medidas-table td:last-child{text-align:right;font-family:'Cormorant Garamond',serif;font-size:.95rem}
+
+.contact-section{background:var(--dark);color:var(--light);padding:5rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.contact-tag{font-size:.68rem;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);margin-bottom:.8rem}
+.contact-title{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:400;line-height:1.15;margin-bottom:1.2rem}
+.contact-title em{font-style:italic;color:var(--accent)}
+.contact-desc{font-size:.88rem;color:rgba(253,250,246,.55);line-height:1.8;margin-bottom:2rem}
+.contact-box{border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:2rem;background:rgba(255,255,255,.04)}
+.contact-box p{font-size:.88rem;color:rgba(253,250,246,.6);line-height:1.8}
+.contact-box strong{color:rgba(253,250,246,.9)}
+.contact-privada{margin-top:1.5rem;padding:1.2rem 1.5rem;background:rgba(201,168,118,.12);border:1px solid rgba(201,168,118,.25);border-radius:3px}
+.contact-privada p{font-size:.82rem;color:var(--accent);line-height:1.7}
+.contact-privada strong{color:#e8c98a}
+
+footer{padding:1.5rem 4rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);background:var(--light)}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--muted)}
+.footer-copy{font-size:.75rem;color:var(--muted)}
+
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;align-items:center;justify-content:center}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:88vh;object-fit:contain;border-radius:2px}
+.lb-close{position:absolute;top:1.5rem;right:2rem;color:#fff;font-size:2rem;cursor:pointer;line-height:1;opacity:.7;transition:opacity .2s}
+.lb-close:hover{opacity:1}
+.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:2rem;cursor:pointer;padding:.5rem 1rem;opacity:.6;transition:opacity .2s;user-select:none}
+.lb-prev{left:1rem}.lb-next{right:1rem}
+.lb-prev:hover,.lb-next:hover{opacity:1}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .hero-gallery{min-height:300px}
+  .stats-bar{grid-template-columns:repeat(3,1fr)}
+  .feat-grid,.zona-grid,.transport-grid,.plano-inner,.contact-section{grid-template-columns:1fr}
+  .section,.zona-section,.plano-section,.contact-section{padding:3rem 1.5rem}
+  .gallery-full-grid img:first-child{grid-column:span 1;height:220px}
+  nav{padding-left:1.5rem;padding-right:1.5rem}
+  .mode-bar{left:50%;transform:translateX(-50%)}
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Mossèn Amadeu Oller <span>·</span> 38</div>
+  <div class="nav-links">
+    <a href="#galeria">Galería</a>
+    <a href="#zona">La zona</a>
+    <a href="#plano">Plano</a>
+    <a href="#contacto">Contactar</a>
+  </div>
+</nav>
+
+<div class="mode-bar">
+  <button class="mode-btn active" id="btn-venta" onclick="setMode('venta')">Comprar</button>
+  <button class="mode-btn" id="btn-alquiler" onclick="setMode('alquiler')">Alquilar</button>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">La Bordeta · Sants-Montjuïc · Barcelona</div>
+    <h1>Un piso con <em>carácter</em><br>en el corazón de Sants</h1>
+    <p class="hero-address"><strong>Carrer Mossèn Amadeu Oller, 38</strong> · Planta 5ª · 57 m² · 3 habitaciones</p>
+
+    <div class="price-block">
+      <div class="price-label">Precio</div>
+      <div class="price-sale-val show">
+        <div class="price-value">Consultar <small>precio</small></div>
+      </div>
+      <div class="price-rent-val">
+        <div class="price-value">Consultar <small>precio</small></div>
+      </div>
+    </div>
+
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Solicitar visita</button>
+      <button class="btn-secondary" onclick="document.getElementById('descripcion').scrollIntoView({behavior:'smooth'})">Ver detalles</button>
+    </div>
+  </div>
+
+  <div class="hero-gallery">
+    <div class="gallery-main" onclick="openLb(0)">
+      <img src="fotos/01-balcon-atardecer.jpg" alt="Balcón al atardecer">
+    </div>
+    <div class="gallery-row">
+      <div class="gallery-thumb" onclick="openLb(2)">
+        <img src="fotos/03-salon.jpg" alt="Salón">
+      </div>
+      <div class="gallery-thumb" onclick="openLb(1)">
+        <img src="fotos/02-vistas-balcon.jpg" alt="Vistas">
+        <span class="gallery-count">+12 fotos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-n">57</span><div class="stat-l">m² útiles</div></div>
+  <div class="stat"><span class="stat-n">3</span><div class="stat-l">Habitaciones</div></div>
+  <div class="stat"><span class="stat-n">1</span><div class="stat-l">Baño</div></div>
+  <div class="stat"><span class="stat-n">5ª</span><div class="stat-l">Planta</div></div>
+  <div class="stat"><span class="stat-n"><i class="ti ti-check" style="font-size:1.6rem"></i></span><div class="stat-l">Balcón + Galería</div></div>
+</div>
+
+<div class="section" id="descripcion">
+  <p class="sec-tag">El inmueble</p>
+  <h2 class="sec-title">Un hogar con vistas abiertas<br><em>desde cada habitación</em></h2>
+  <p style="font-size:.9rem;color:var(--muted);line-height:1.85;max-width:660px">
+    Piso de 57 m² en planta 5ª con ascensor, distribuido en tres habitaciones, salón-comedor con acceso a balcón, cocina equipada, baño con plato de ducha, galería luminosa y amplio balcón con vistas despejadas al skyline de Barcelona. Suelo cerámico original en salón y un dormitorio, parquet en los otros dos dormitorios. Puertas interiores de madera de cerezo. Calefacción central por radiadores y aire acondicionado. Comunidad de vecinos de <strong>60 €/mes</strong>, con muy buen ambiente en la finca.
+  </p>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon"><i class="ti ti-sun" aria-hidden="true"></i></div>
+      <div class="feat-title">Vistas despejadas</div>
+      <div class="feat-desc">Planta 5ª con vistas desde cada habitación y balcón de 3,30 m. Vistas abiertas hacia la iglesia de Sant Medir y las antiguas naves de Can Batlló. Algo difícil de encontrar en Barcelona.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><i class="ti ti-droplet" aria-hidden="true"></i></div>
+      <div class="feat-title">Baño reformado</div>
+      <div class="feat-desc">Baño con plato de ducha y revestimiento de porcelánico. Funcional y en buen estado.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><i class="ti ti-wind" aria-hidden="true"></i></div>
+      <div class="feat-title">Galería independiente</div>
+      <div class="feat-desc">Zona de lavado independiente con ventilación propia. Además, todos los vecinos tienen acceso a terrado comunitario para tender.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><i class="ti ti-bed" aria-hidden="true"></i></div>
+      <div class="feat-title">3 habitaciones</div>
+      <div class="feat-desc">Dos habitaciones individuales con parquet y armarios a medida, más habitación doble con mueble a medida.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><i class="ti ti-flame" aria-hidden="true"></i></div>
+      <div class="feat-title">Calefacción central</div>
+      <div class="feat-desc">Radiadores en todas las estancias incluidos en comunidad. Aire acondicionado en el salón. Comunidad solo 60 €/mes.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><i class="ti ti-elevator" aria-hidden="true"></i></div>
+      <div class="feat-title">Ascensor + Can Batlló</div>
+      <div class="feat-desc">Edificio con ascensor. La entrada al parque y espacio comunitario de Can Batlló está literalmente frente al portal.</div>
+    </div>
+    <div class="feat-card" style="grid-column:span 1">
+      <div class="feat-icon"><i class="ti ti-trees" aria-hidden="true"></i></div>
+      <div class="feat-title">Zonas verdes a un paso</div>
+      <div class="feat-desc">Can Batlló enfrente, Montjuïc accesible andando en un paseo tranquilo, Parque de l'Espanya Industrial, Can Mantega y otros parques muy cerca.</div>
+    </div>
+    <div class="feat-card" style="grid-column:span 2">
+      <div class="feat-icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+      <div class="feat-title">Muy buenos vecinos</div>
+      <div class="feat-desc">Finca tranquila con excelente comunidad de vecinos. Un detalle que marca la diferencia en el día a día y que no siempre es fácil de encontrar.</div>
+    </div>
+  </div>
+</div>
+
+<div id="galeria" style="padding:0 0 4rem;background:var(--light)">
+  <div style="padding:0 4rem 1.5rem;max-width:1200px;margin:0 auto">
+    <p class="sec-tag">Galería completa</p>
+  </div>
+  <div class="gallery-full-grid" style="max-width:1200px;margin:0 auto;padding:0 4rem">
+    <img src="fotos/01-balcon-atardecer.jpg" alt="Balcón al atardecer" onclick="openLb(0)">
+    <img src="fotos/02-vistas-balcon.jpg" alt="Vistas desde el balcón" onclick="openLb(1)">
+    <img src="fotos/03-salon.jpg" alt="Salón" onclick="openLb(2)">
+    <img src="fotos/04-salon-amplio.jpg" alt="Salón" onclick="openLb(3)">
+    <img src="fotos/05-entrada.jpg" alt="Entrada" onclick="openLb(4)">
+    <img src="fotos/06-cocina.jpg" alt="Cocina" onclick="openLb(5)">
+    <img src="fotos/07-cocina-salon.jpg" alt="Vista cocina-salón" onclick="openLb(6)">
+    <img src="fotos/08-bano.jpg" alt="Baño" onclick="openLb(7)">
+    <img src="fotos/09-habitacion-doble.jpg" alt="Habitación doble" onclick="openLb(9)">
+    <img src="fotos/09-habitacion-doble.jpg" alt="Habitación doble" onclick="openLb(9)">
+    <img src="fotos/11-habitacion-abatible-2.jpg" alt="Habitación abatible 2" onclick="openLb(10)">
+    <img src="fotos/12-habitacion-abatible.jpg" alt="Habitación con cama abatible" onclick="openLb(11)">
+  </div>
+</div>
+
+<div class="zona-section" id="zona">
+  <div class="zona-inner">
+    <p class="sec-tag">La zona</p>
+    <h2 class="sec-title">Todo a pie desde el portal</h2>
+
+    <div class="transport-grid">
+      <div>
+        <h3>Transporte público</h3>
+        <ul class="transport-list">
+          <li><span class="t-badge t-bus">H12 H16 L95 L80</span> Parada en la puerta — <strong>1 min</strong></li>
+          <li><span class="t-badge t-metro">L1</span> Metro Mercat Nou — <strong>6 min andando</strong></li>
+          <li><span class="t-badge t-fgc">FGC</span> Magòria – La Campana — <strong>8 min andando</strong></li>
+          <li><span class="t-badge t-renfe">Rodalies</span> <span class="t-badge t-metro">L1 L5</span> Plaça de Sants + Estació de Sants — <strong>10 min andando</strong> · AVE, Rodalies, aeropuerto</li>
+          <li>Carril bici Gran Via recién inaugurado — conexión directa al centro</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Parques y zonas verdes</h3>
+        <ul class="transport-list">
+          <li><strong>Can Batlló</strong> — enfrente del portal. 29.000 m² de parque, zona infantil, huertos urbanos, biblioteca popular y talleres vecinales</li>
+          <li><strong>Plaça de la Farga</strong> — 5 min andando. Plaza ajardinada del barrio con pistas deportivas al aire libre y el CEM La Bordeta al lado</li>
+          <li><strong>CEM La Bordeta</strong> — c/ Noguera Pallaresa, 34-42 · 6 min andando. Polideportivo municipal con piscina, sala de fitness, pistas, spinning, pilates y cafetería</li>
+          <li><strong>Parc de l'Espanya Industrial</strong> — 10 min andando. Lago, esculturas y polideportivo olímpico</li>
+          <li><strong>Parc de Can Mantega</strong> — 12 min andando. Zona verde tranquila con juegos infantiles</li>
+          <li><strong>Montjuïc</strong> — accesible subiendo a pie en un paseo tranquilo desde el barrio</li>
+          <li><strong>Jardins de les Tres Xemeneies</strong> — 15 min, junto al Paral·lel</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="radio-block">
+      <div class="radio-title"><span class="radio-badge">Hasta 10 min</span> Servicios del día a día</div>
+      <div class="zona-grid">
+        <div class="zona-card">
+          <h4><i class="ti ti-shopping-cart" aria-hidden="true"></i> Supermercados</h4>
+          <ul>
+            <li><span class="dot">→</span><div><strong>Mercadona</strong> — Gran Via 191 · 3 min (214 m) · lun–sáb 9:00–21:30</div></li>
+            <li><span class="dot">→</span><div><strong>Condis</strong> — Gavà 21-25 · 4 min (~300 m) · lun–sáb 9:00–21:00</div></li>
+            <li><span class="dot">→</span><div><strong>Caprabo</strong> — Constitució 40-46 · 5 min (327 m) · todos los días 8:30–22:30</div></li>
+          </ul>
+        </div>
+        <div class="zona-card">
+          <h4><i class="ti ti-heart-plus" aria-hidden="true"></i> Salud</h4>
+          <ul>
+            <li><span class="dot">→</span><div><strong>CAP Bordeta-Magòria</strong> — c/ Corral · ~8 min andando · Tel. 93 431 65 70</div></li>
+            <li><span class="dot">→</span><div>3 farmacias en radio de 400 m</div></li>
+            <li><span class="dot">→</span><div><strong>CUAP Manso</strong> — urgencias 24h · ~15 min en bus (L1 hasta Rocafort)</div></li>
+            <li><span class="dot">→</span><div>Nuevo CUAP 24h previsto en la remodelación de Can Batlló–Magòria</div></li>
+          </ul>
+        </div>
+        <div class="zona-card">
+          <h4><i class="ti ti-school" aria-hidden="true"></i> Educación infantil y primaria</h4>
+          <ul>
+            <li><span class="dot">→</span><div><strong>CEIP Sant Medir</strong> — colegio público, La Bordeta · 5 min</div></li>
+            <li><span class="dot">→</span><div><strong>Escola PROA</strong> — concertada, infantil-bachillerato, Premio Ciudad BCN 2015 · 7 min</div></li>
+            <li><span class="dot">→</span><div><strong>Escola Bressol Guinbó</strong> — guardería municipal, La Bordeta · 5 min</div></li>
+            <li><span class="dot">→</span><div><strong>Escola Bressol L'Esquirol</strong> — c/ Noguera Pallaresa · 5 min</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="radio-block">
+      <div class="radio-title"><span class="radio-badge">Hasta 15 min</span> Cultura, ocio y secundaria</div>
+      <div class="zona-grid">
+        <div class="zona-card">
+          <h4><i class="ti ti-masks-theater" aria-hidden="true"></i> Teatros y salas</h4>
+          <ul>
+            <li><span class="dot">→</span><div><strong>Sala Flyhard</strong> — c/ Alpens 3, Sants · 10 min andando. Sala de referencia del teatro catalán contemporáneo, 44 butacas, entradas ~20 €</div></li>
+            <li><span class="dot">→</span><div><strong>CaixaFòrum</strong> — Av. Ferrer i Guàrdia · 15 min andando. Exposiciones temporales de primer nivel, entrada gratuita para menores</div></li>
+            <li><span class="dot">→</span><div><strong>Pavelló Mies van der Rohe</strong> — Av. Ferrer i Guàrdia 7 · 15 min. Icono de la arquitectura moderna del s.XX</div></li>
+          </ul>
+        </div>
+        <div class="zona-card">
+          <h4><i class="ti ti-movie" aria-hidden="true"></i> Cine y ocio</h4>
+          <ul>
+            <li><span class="dot">→</span><div><strong>Cines Yelmo Sants</strong> — 10 min andando</div></li>
+            <li><span class="dot">→</span><div><strong>Font Màgica de Montjuïc</strong> — espectáculo gratuito de luz y agua · 15 min</div></li>
+            <li><span class="dot">→</span><div><strong>Parc Joan Miró</strong> — con la escultura <em>Dona i Ocell</em> de Miró · 12 min</div></li>
+            <li><span class="dot">→</span><div>Bares y terrazas en c/ Constitució, Gavà y Sants</div></li>
+          </ul>
+        </div>
+        <div class="zona-card">
+          <h4><i class="ti ti-book" aria-hidden="true"></i> Secundaria y formación</h4>
+          <ul>
+            <li><span class="dot">→</span><div><strong>Escola Joan Pelegrí</strong> — concertada, desde 1904, infantil-bachillerato, Red UNESCO · 12 min</div></li>
+            <li><span class="dot">→</span><div><strong>Escola Miquel Bleach</strong> — programa Fundació Catalunya-La Pedrera, especializada en arte · 12 min</div></li>
+            <li><span class="dot">→</span><div><strong>Poliesportiu Municipal La Bordeta</strong> — Pl. de la Farga · 8 min</div></li>
+            <li><span class="dot">→</span><div><strong>Biblioteca de Sants – Les Corts</strong> · 12 min</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="radio-block">
+      <div class="radio-title"><span class="radio-badge">Hasta 30 min</span> Lo mejor de Barcelona, cerca</div>
+      <div class="zona-grid">
+        <div class="zona-card">
+          <h4><i class="ti ti-building-arch" aria-hidden="true"></i> Museos y galerías</h4>
+          <ul>
+            <li><span class="dot">→</span><div><strong>MNAC</strong> — Palau Nacional, Montjuïc · Arte catalán de 1.000 años · gratuito primeros domingos de mes</div></li>
+            <li><span class="dot">→</span><div><strong>Fundació Joan Miró</strong> — Montjuïc · Una de las mejores colecciones de arte moderno del país</div></li>
+            <li><span class="dot">→</span><div><strong>Poble Espanyol</strong> — recinto cultural, ocio nocturno y mercado de artesanía</div></li>
+          </ul>
+        </div>
+        <div class="zona-card">
+          <h4><i class="ti ti-star" aria-hidden="true"></i> Escena y festival</h4>
+          <ul>
+            <li><span class="dot">→</span><div><strong>Teatre Lliure</strong> — Plaça Margarida Xirgu, Montjuïc · Teatro nacional de referencia · 20 min</div></li>
+            <li><span class="dot">→</span><div><strong>Teatre Grec</strong> — Montjuïc · Teatro al aire libre, sede del Festival Grec cada verano</div></li>
+            <li><span class="dot">→</span><div><strong>Anella Olímpica</strong> — patrimonio olímpico con vistas panorámicas</div></li>
+          </ul>
+        </div>
+        <div class="zona-card">
+          <h4><i class="ti ti-map-pin" aria-hidden="true"></i> Vida de barrio</h4>
+          <ul>
+            <li><span class="dot">→</span><div>Festa Major de la Bordeta cada verano — fiesta muy arraigada en el barrio</div></li>
+            <li><span class="dot">→</span><div>Talleres, actividades infantiles y mercadillo en <strong>Can Batlló</strong> (enfrente)</div></li>
+            <li><span class="dot">→</span><div>Zona en plena transformación urbana — nuevo barrio Magòria con equipamientos, zonas verdes y vivienda dotacional</div></li>
+            <li><span class="dot">→</span><div>Carril bici Gran Via conectado con el centro de Barcelona</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="plano-section" id="plano">
+  <div class="plano-inner">
+    <div>
+      <p class="sec-tag">Distribución</p>
+      <h2 class="sec-title">Plano y medidas</h2>
+      <img src="fotos/plano.jpg" alt="Plano del piso" style="margin-top:1rem">
+    </div>
+    <div>
+      <table class="medidas-table">
+        <tr><td>Recibidor</td><td>2,26 × 0,99 m</td></tr>
+        <tr><td>Salón / Comedor</td><td>4,40 × 3,30 m</td></tr>
+        <tr><td>Cocina</td><td>2,65 × 1,42 m</td></tr>
+        <tr><td>Habitación 1 (doble)</td><td>(2,99 × 2,80) + (0,71 × 1,00) m</td></tr>
+        <tr><td>Habitación 2</td><td>3,08 × 2,06 m</td></tr>
+        <tr><td>Habitación 3</td><td>2,37 × 3,99 m</td></tr>
+        <tr><td>Baño</td><td>3,18 × 1,20 m</td></tr>
+        <tr><td>Distribuidor</td><td>2,04 × 0,85 m</td></tr>
+        <tr><td>Galería</td><td>1,74 × 1,50 m</td></tr>
+        <tr><td>Balcón</td><td>3,30 × 0,95 m</td></tr>
+      </table>
+      <p style="margin-top:2rem;font-size:.8rem;color:var(--muted);line-height:1.75">
+        Superficie útil total: <strong style="color:var(--dark)">57 m²</strong>.<br>
+        Planta 5ª con ascensor. Edificio de obra sólida de los años 80.<br>
+        Calefacción central · Aire acondicionado · Comunidad 60 €/mes
+      </p>
+    </div>
+  </div>
+</div>
+
+<section class="contact-section" id="contacto">
+  <div>
+    <p class="contact-tag">¿Te interesa?</p>
+    <h2 class="contact-title">Hablemos<br>sin <em>compromiso</em></h2>
+    <p class="contact-desc">Visitas disponibles de lunes a sábado en el horario que mejor te venga. Respondemos con la mayor agilidad posible.</p>
+    <div class="contact-privada">
+      <p><i class="ti ti-lock" aria-hidden="true"></i> <strong>Venta privada durante las próximas semanas.</strong><br>
+      Este piso se mueve entre conocidos antes de salir al mercado. Si has recibido este enlace, tienes acceso prioritario.<br><br>
+      Para concertar visita o pedir información, <strong>llama a Mónica</strong> directamente o pide su número a la persona que te ha pasado este enlace.</p>
+    </div>
+  </div>
+  <div>
+    <div class="contact-box">
+      <p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:1.2rem">Detalles del inmueble</p>
+      <p><i class="ti ti-map-pin" aria-hidden="true"></i> <strong>Carrer Mossèn Amadeu Oller, 38</strong><br>La Bordeta · Sants-Montjuïc · Barcelona</p>
+      
+      
+      <p style="margin-top:.8rem;font-size:.8rem;color:rgba(253,250,246,.4)">57 m² · Planta 5ª · 3 hab. · 1 baño · Ascensor<br>Calefacción central · AA · Comunidad 60 €/mes</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Mossèn Amadeu Oller · Barcelona</div>
+  <div class="footer-copy">© 2026 · Todos los derechos reservados</div>
+</footer>
+
+<div class="lightbox" id="lb" onclick="closeLb(event)">
+  <span class="lb-close" onclick="closeLb()">×</span>
+  <span class="lb-prev" onclick="lbNav(-1,event)">‹</span>
+  <img id="lb-img" src="" alt="">
+  <span class="lb-next" onclick="lbNav(1,event)">›</span>
+</div>
+
+<script>
+function setMode(m){
+  document.getElementById('btn-venta').classList.toggle('active',m==='venta');
+  document.getElementById('btn-alquiler').classList.toggle('active',m==='alquiler');
+  document.querySelector('.price-sale-val').classList.toggle('show',m==='venta');
+  document.querySelector('.price-rent-val').classList.toggle('show',m==='alquiler');
+}
+const lbImgs=Array.from(document.querySelectorAll('.gallery-full-grid img,.gallery-main img,.gallery-thumb img')).map(i=>i.src);
+let lbIdx=0;
+function openLb(i){lbIdx=i;document.getElementById('lb-img').src=lbImgs[i];document.getElementById('lb').classList.add('open');document.body.style.overflow='hidden';}
+function closeLb(e){if(!e||e.target===document.getElementById('lb')||e.currentTarget.classList.contains('lb-close')){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}}
+function lbNav(d,e){e.stopPropagation();lbIdx=(lbIdx+d+lbImgs.length)%lbImgs.length;document.getElementById('lb-img').src=lbImgs[lbIdx];}
+document.addEventListener('keydown',e=>{if(document.getElementById('lb').classList.contains('open')){if(e.key==='Escape')closeLb();if(e.key==='ArrowLeft')lbNav(-1,{stopPropagation:()=>{}});if(e.key==='ArrowRight')lbNav(1,{stopPropagation:()=>{}});}});
+</script>
+</body>
+</html>
